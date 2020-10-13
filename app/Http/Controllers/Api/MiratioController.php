@@ -15,7 +15,8 @@ class MiratioController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'channel_id' => 'required',
-            'token' => 'required'
+            'token' => 'required',
+            'miratio_token' => 'required'
         ]);
 
         if($validator->fails()) {
@@ -25,7 +26,7 @@ class MiratioController extends Controller
         }
 
         $url = "https://nova-back.astroselling.com/jupiter/v1/"; // stage
-        $miratio_token = '56JAKYY3L607HC0CBHJR0HF9WNJUPLHIIPD4P'; // Miratio api token
+        // $miratio_token = '56JAKYY3L607HC0CBHJR0HF9WNJUPLHIIPD4P'; // Miratio api token
 
         $model = new Miratio();
         $logPath = $model->getLogDirectory();
@@ -39,6 +40,7 @@ class MiratioController extends Controller
         try {
             $channel_id = $request['channel_id'];
             $token = $request['token'];
+            $miratio_token = $request['miratio_token'];
             $rootBegin = date('Y-m-d H:i:s');
             
             // connecting to sdk ..
@@ -54,7 +56,14 @@ class MiratioController extends Controller
 
             // get products from ERP ..
             $model->setToken($miratio_token);
-            $products = $model->getProducts();
+
+            $result = $model->getProducts();
+            
+            if($result->success == false) {
+                return response()->json([], 200);
+            }
+            
+            $products = $result->products;
 
             if($products) {
                 $model->AstroLog('Miratio products: ' . count($products), false, true);

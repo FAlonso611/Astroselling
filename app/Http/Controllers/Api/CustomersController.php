@@ -125,15 +125,11 @@ class CustomersController extends Controller
         
         $response = array();
         foreach($customers as $customer) {
-            $channel_id = $customer->channel_id;
-            $astroselling_token = $customer->astroselling_token;
-            $miratio_token = $customer->miratio_token;
-
             $data = [
                 'channel_id' => $customer->channel_id,
-                'token' => $customer->astroselling_token
-            ];
-        
+                'token' => $customer->astroselling_token,
+                'miratio_token' => $customer->miratio_token
+            ];        
             $newRequest = Request::create('api/miratio/sync', 'post', $data);
             $result = app()->handle($newRequest)->getContent();
 

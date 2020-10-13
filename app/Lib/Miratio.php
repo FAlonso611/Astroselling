@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Lib;
+use stdClass;
 
 class Miratio
 {
@@ -16,7 +17,7 @@ class Miratio
         $this->token = $token;
     }
 
-    public function getProducts() :array
+    public function getProducts()
     {
         try {
 			$url = $this->getMiratioUrl(); 
@@ -40,11 +41,26 @@ class Miratio
             curl_close($curl);
             $products = json_decode($response);
 
+            $response = new stdClass();
+
+            if(isset($products->titulo)) {
+                if($products->titulo == 'error') {
+                    $response->success = false;
+                }
+            } else {
+                $response->success = true;
+                $response->products = $products;
+            }
+
+            return $response;
+
 		} catch (ThrowException $e) {
             $this->AstroLog('GET products: ' . $e->getMessage(), false, true, 'error');
+            
+            $response = new stdClass();
+            $response->success = false;
+            return $response;
         }
-
-        return $products;
     }
 
     public function getLogDirectory()
