@@ -1,12 +1,19 @@
 {
-    "name": "laravel/laravel",
-    "type": "project",
-    "description": "The Laravel Framework.",
+    "name": "astroselling/miratio",
+    "type": "library",
+    "description": "Miratio integration.",
     "keywords": [
-        "framework",
-        "laravel"
+        "miratio",
+        "laravel",
+        "astroselling"
     ],
     "license": "MIT",
+    "authors": [
+        {
+            "name": "Fernando Alonso",
+            "email": "dragon.misu111@gmail.com"
+        }
+    ],
     "require": {
         "php": "^7.3",
         "astroselling/jupiter-sdk": "^1.09",
